@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YILDIZ Enterprise - Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary-color: #64748b;
+            --success-color: #059669;
+            --warning-color: #d97706;
+            --danger-color: #dc2626;
+            --info-color: #0284c7;
+            --light-bg: #f8fafc;
+            --white: #ffffff;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--light-bg);
+            color: var(--gray-900);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--primary-color);
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray-600);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .nav-item a:hover { color: var(--primary-color); background-color: var(--gray-50); }
+        .nav-item.active a { color: var(--primary-color); background-color: rgb(37 99 235 / 0.1); }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .notifications {
+            position: relative;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            color: var(--gray-600);
+            transition: all 0.2s;
+        }
+
+        .notifications:hover {
+            background-color: var(--gray-50);
+            color: var(--primary-color);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 0.25rem;
+            right: 0.25rem;
+            background: var(--danger-color);
+            color: white;
+            border-radius: 50%;
+            width: 1rem;
+            height: 1rem;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            border: 1px solid var(--gray-200);
+            background: var(--white);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .user-profile:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow);
+        }
+
+        .user-avatar {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--info-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .user-info { display: flex; flex-direction: column; }
+        .user-name { font-weight: 600; font-size: 0.9rem; color: var(--gray-900); }
+        .user-role { font-size: 0.75rem; color: var(--gray-600); }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+        }
+
+        .sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+
+        .sidebar-card {
+            background: var(--white);
+            border-radius: 0.75rem;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .sidebar-header {
+            background: var(--gray-50);
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--gray-200);
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--gray-700);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sidebar-content { padding: 1.25rem; }
+
+        .quick-stats { display: flex; flex-direction: column; gap: 1rem; }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem;
+            background: var(--gray-50);
+            border-radius: 0.5rem;
+        }
+
+        .stat-label { font-size: 0.85rem; color: var(--gray-600); font-weight: 500; }
+        .stat-value { font-weight: 700; color: var(--gray-900); }
+
+        .quick-actions { display: flex; flex-direction: column; gap: 0.75rem; }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: var(--gray-50);
+            border: none;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            color: var(--gray-700);
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .action-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .content-area { display: flex; flex-direction: column; gap: 2rem; }
+
+        .welcome-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--info-color) 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 50%);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-10px, -10px) rotate(180deg); }
+        }
+
+        .welcome-content { position: relative; z-index: 1; }
+        .welcome-title { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .welcome-subtitle { opacity: 0.9; font-size: 1.1rem; margin-bottom: 1.5rem; }
+
+        .welcome-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .welcome-stat {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 0.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .welcome-stat-number { font-size: 1.5rem; font-weight: 700; display: block; }
+        .welcome-stat-label { font-size: 0.85rem; opacity: 0.8; }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .dashboard-card {
+            background: var(--white);
+            border-radius: 0.75rem;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .dashboard-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-xl); }
+
+        .card-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-title {
+            font-weight: 600;
+            color: var(--gray-900);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-content { padding: 1.5rem; }
+
+        .activity-feed { display: flex; flex-direction: column; gap: 1rem; }
+
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--gray-50);
+            border-radius: 0.5rem;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .activity-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .activity-content { flex: 1; }
+        .activity-title { font-weight: 600; color: var(--gray-900); margin-bottom: 0.25rem; }
+        .activity-description { color: var(--gray-600); font-size: 0.9rem; margin-bottom: 0.5rem; }
+        .activity-time { color: var(--gray-500); font-size: 0.8rem; }
+
+        .task-list { display: flex; flex-direction: column; gap: 0.75rem; }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--gray-50);
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .task-checkbox {
+            width: 1.25rem;
+            height: 1.25rem;
+            border: 2px solid var(--gray-300);
+            border-radius: 0.25rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .task-checkbox.completed {
+            background: var(--success-color);
+            border-color: var(--success-color);
+            position: relative;
+        }
+
+        .task-checkbox.completed::after {
+            content: '✓';
+            color: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.75rem;
+        }
+
+        .task-content { flex: 1; }
+        .task-title { font-weight: 500; color: var(--gray-900); }
+
+        .task-priority { padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; }
+        .priority-high { background: rgb(220 38 38 / 0.1); color: var(--danger-color); }
+        .priority-medium { background: rgb(217 119 6 / 0.1); color: var(--warning-color); }
+        .priority-low { background: rgb(5 150 105 / 0.1); color: var(--success-color); }
+
+        /* File list styles */
+        .file-list { display: flex; flex-direction: column; gap: 0.75rem; }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--gray-50);
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .file-item:hover {
+            background: var(--gray-100);
+            transform: translateX(5px);
+        }
+
+        .file-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .file-icon.pdf { background: rgb(220 38 38 / 0.1); color: var(--danger-color); }
+        .file-icon.doc { background: rgb(37 99 235 / 0.1); color: var(--primary-color); }
+        .file-icon.xls { background: rgb(5 150 105 / 0.1); color: var(--success-color); }
+        .file-icon.img { background: rgb(168 85 247 / 0.1); color: #a855f7; }
+
+        .file-content { flex: 1; }
+        .file-title { font-weight: 500; color: var(--gray-900); margin-bottom: 0.25rem; }
+        .file-meta { font-size: 0.8rem; color: var(--gray-600); }
+
+        .file-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .file-action {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .file-action.view {
+            background: rgb(37 99 235 / 0.1);
+            color: var(--primary-color);
+        }
+
+        .file-action.download {
+            background: rgb(5 150 105 / 0.1);
+            color: var(--success-color);
+        }
+
+        .file-action:hover {
+            transform: scale(1.05);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .btn-danger { background: #e74c3c; color: white; }
+        .btn-danger:hover { background: #c0392b; transform: translateY(-2px); }
+
+        @media (max-width: 1024px) {
+            .main-container { grid-template-columns: 1fr; padding: 1rem; }
+            .navbar { padding: 1rem; }
+            .nav-menu { display: none; }
+        }
+
+        @media (max-width: 768px) {
+            .welcome-stats { grid-template-columns: repeat(2, 1fr); }
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
+
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <div class="logo">
+                <i class="fas fa-building"></i>
+                <span>TechCorp</span>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item active">
+                    <a href="{{ url_for('dashboard') }}"><i class="fas fa-home"></i> Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('files') }}"><i class="fas fa-folder"></i> Dosyalar</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('profile') }}"><i class="fas fa-user"></i> Profil</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#"><i class="fas fa-cog"></i> Ayarlar</a>
+                </li>
+                {% if session.user_role == 'admin' %}
+                <li class="nav-item">
+                    <a href="{{ url_for('admin_panel') }}"><i class="fas fa-shield-alt"></i> Admin</a>
+                </li>
+                {% endif %}
+            </ul>
+            
+            <div class="user-menu">
+                <div class="notifications" onclick="showNotifications()">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+                
+                <div class="user-profile" onclick="toggleUserMenu()">
+                    <div class="user-avatar">{{ user.first_name[0] }}{{ user.last_name[0] }}</div>
+                    <div class="user-info">
+                        <div class="user-name">{{ user.first_name }} {{ user.last_name }}</div>
+                        <div class="user-role">{{ user.role|title }}</div>
+                    </div>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                
+                <a href="{{ url_for('logout') }}" class="btn btn-danger">
+                    <i class="fas fa-sign-out-alt"></i> Çıkış
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <div class="sidebar-card">
+                <div class="sidebar-header">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Hızlı İstatistikler</span>
+                </div>
+                <div class="sidebar-content">
+                    <div class="quick-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Aktif Görevler</span>
+                            <span class="stat-value">{{ stats.pending_tasks }}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Tamamlanan</span>
+                            <span class="stat-value">{{ stats.completed_tasks }}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Dosya Görüntüleme</span>
+                            <span class="stat-value">{{ stats.viewed_files }}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Dosya İndirme</span>
+                            <span class="stat-value">{{ stats.downloaded_files }}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Başarı Oranı</span>
+                            <span class="stat-value">{{ stats.completion_rate }}%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-card">
+                <div class="sidebar-header">
+                    <i class="fas fa-bolt"></i>
+                    <span>Hızlı İşlemler</span>
+                </div>
+                <div class="sidebar-content">
+                    <div class="quick-actions">
+                        <a href="#" class="action-btn">
+                            <i class="fas fa-plus"></i>
+                            <span>Yeni Görev</span>
+                        </a>
+                        <a href="{{ url_for('files') }}" class="action-btn">
+                            <i class="fas fa-folder-open"></i>
+                            <span>Dosya Yöneticisi</span>
+                        </a>
+                        <a href="#" class="action-btn">
+                            <i class="fas fa-search"></i>
+                            <span>Dosya Ara</span>
+                        </a>
+                        <a href="#" class="action-btn">
+                            <i class="fas fa-users"></i>
+                            <span>Takım Davet Et</span>
+                        </a>
+                        <a href="#" class="action-btn">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Rapor Oluştur</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="content-area">
+            <section class="welcome-section fade-in">
+                <div class="welcome-content">
+                    <h1 class="welcome-title">Hoş Geldiniz, {{ user.first_name }}! 👋</h1>
+                    <p class="welcome-subtitle">
+                        Bugün {{ stats.pending_tasks }} aktif göreviniz ve {{ stats.viewed_files + stats.downloaded_files }} dosya erişiminiz bulunuyor. 
+                        Başarı oranınız %{{ stats.completion_rate }} - harika iş çıkarıyorsunuz!
+                    </p>
+                    
+                    <div class="welcome-stats">
+                        <div class="welcome-stat">
+                            <span class="welcome-stat-number">{{ stats.completion_rate }}%</span>
+                            <span class="welcome-stat-label">Verimlilik</span>
+                        </div>
+                        <div class="welcome-stat">
+                            <span class="welcome-stat-number">{{ stats.pending_tasks }}</span>
+                            <span class="welcome-stat-label">Aktif Görev</span>
+                        </div>
+                        <div class="welcome-stat">
+                            <span class="welcome-stat-number">{{ stats.viewed_files }}</span>
+                            <span class="welcome-stat-label">Görüntülenen</span>
+                        </div>
+                        <div class="welcome-stat">
+                            <span class="welcome-stat-number">{{ stats.downloaded_files }}</span>
+                            <span class="welcome-stat-label">İndirilen</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="dashboard-grid">
+                <!-- Recent Activity -->
+                <div class="dashboard-card fade-in">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-clock"></i>
+                            Son Aktiviteler
+                        </h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="activity-feed">
+                            {% if activities %}
+                                {% for activity in activities %}
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        {% if activity.action == 'LOGIN_SUCCESS' %}
+                                            <i class="fas fa-sign-in-alt"></i>
+                                        {% elif activity.action == 'FILE_DOWNLOAD' %}
+                                            <i class="fas fa-download"></i>
+                                        {% elif activity.action == 'FILE_VIEW' %}
+                                            <i class="fas fa-eye"></i>
+                                        {% elif activity.action == 'PROFILE_UPDATED' %}
+                                            <i class="fas fa-user-edit"></i>
+                                        {% else %}
+                                            <i class="fas fa-clock"></i>
+                                        {% endif %}
+                                    </div>
+                                    <div class="activity-content">
+                                        <div class="activity-title">{{ activity.action.replace('_', ' ')|title }}</div>
+                                        <div class="activity-description">
+                                            {{ activity.details if activity.details else 'Sistem aktivitesi' }}
+                                        </div>
+                                        <div class="activity-time">{{ activity.timestamp }}</div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <p style="color: var(--gray-500); text-align: center;">Henüz aktivite bulunmuyor.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Files -->
+                <div class="dashboard-card fade-in">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-file-alt"></i>
+                            Son Dosyalar
+                        </h3>
+                        <a href="{{ url_for('files') }}" style="color: var(--primary-color); text-decoration: none; font-size: 0.9rem;">
+                            Tümünü Gör <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    <div class="card-content">
+                        <div class="file-list">
+                            {% if recent_files %}
+                                {% for file in recent_files %}
+                                <div class="file-item" onclick="window.open('/view/{{ file.id }}', '_blank')">
+                                    <div class="file-icon {{ file.file_type }}">
+                                        <i class="{{ get_file_icon(file.file_type) }}"></i>
+                                    </div>
+                                    <div class="file-content">
+                                        <div class="file-title">{{ file.title }}</div>
+                                        <div class="file-meta">
+                                            {{ file.category_name or 'Uncategorized' }} • 
+                                            {{ format_file_size(file.file_size) }} • 
+                                            {{ file.download_count + file.view_count }} erişim
+                                        </div>
+                                    </div>
+                                    <div class="file-actions">
+                                        <a href="/view/{{ file.id }}" class="file-action view" onclick="event.stopPropagation()">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="/download/{{ file.id }}" class="file-action download" onclick="event.stopPropagation()">
+                                            <i class="fas fa-download"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <p style="color: var(--gray-500); text-align: center;">Henüz dosya bulunmuyor.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tasks -->
+                <div class="dashboard-card fade-in">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-tasks"></i>
+                            Günün Görevleri
+                        </h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="task-list">
+                            {% if tasks %}
+                                {% for task in tasks %}
+                                <div class="task-item">
+                                    <div class="task-checkbox {{ 'completed' if task.status == 'completed' else '' }}"></div>
+                                    <div class="task-content">
+                                        <div class="task-title">{{ task.title }}</div>
+                                    </div>
+                                    <div class="task-priority priority-{{ task.priority }}">{{ task.priority|title }}</div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <p style="color: var(--gray-500); text-align: center;">Henüz görev bulunmuyor.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- User Menu Dropdown -->
+    <div id="userMenuDropdown" style="display: none; position: absolute; top: 4rem; right: 2rem; background: white; border-radius: 0.5rem; box-shadow: var(--shadow-xl); z-index: 1000; min-width: 200px;">
+        <div style="padding: 1rem;">
+            <div style="border-bottom: 1px solid var(--gray-200); padding-bottom: 1rem; margin-bottom: 1rem;">
+                <div style="font-weight: 600;">{{ user.first_name }} {{ user.last_name }}</div>
+                <div style="font-size: 0.8rem; color: var(--gray-600);">{{ user.email }}</div>
+            </div>
+            <a href="{{ url_for('profile') }}" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem; text-decoration: none; color: var(--gray-700); border-radius: 0.25rem;" onmouseover="this.style.background='var(--gray-50)'" onmouseout="this.style.background='transparent'">
+                <i class="fas fa-user"></i> Profil
+            </a>
+            <a href="{{ url_for('files') }}" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem; text-decoration: none; color: var(--gray-700); border-radius: 0.25rem;" onmouseover="this.style.background='var(--gray-50)'" onmouseout="this.style.background='transparent'">
+                <i class="fas fa-folder"></i> Dosyalarım
+            </a>
+            <a href="#" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem; text-decoration: none; color: var(--gray-700); border-radius: 0.25rem;" onmouseover="this.style.background='var(--gray-50)'" onmouseout="this.style.background='transparent'">
+                <i class="fas fa-cog"></i> Ayarlar
+            </a>
+            <a href="#" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem; text-decoration: none; color: var(--gray-700); border-radius: 0.25rem;" onmouseover="this.style.background='var(--gray-50)'" onmouseout="this.style.background='transparent'">
+                <i class="fas fa-question-circle"></i> Yardım
+            </a>
+            <hr style="margin: 0.5rem 0; border: none; border-top: 1px solid var(--gray-200);">
+            <a href="{{ url_for('logout') }}" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem; text-decoration: none; color: var(--danger-color); border-radius: 0.25rem;" onmouseover="this.style.background='rgb(220 38 38 / 0.1)'" onmouseout="this.style.background='transparent'">
+                <i class="fas fa-sign-out-alt"></i> Çıkış Yap
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Real-time clock in title
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('tr-TR');
+            document.title = `TechCorp Dashboard - ${timeString}`;
+        }
+        setInterval(updateClock, 1000);
+
+        // User menu toggle
+        function toggleUserMenu() {
+            const dropdown = document.getElementById('userMenuDropdown');
+            dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Close user menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const userProfile = document.querySelector('.user-profile');
+            const dropdown = document.getElementById('userMenuDropdown');
+            
+            if (userProfile && dropdown && !userProfile.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
+
+        // Notifications
+        function showNotifications() {
+            alert('📧 Bildirimler:\n\n• Yeni dosya paylaşıldı\n• Görev tamamlanması gereken\n• Sistem güncellemesi\n• Yeni raporlar mevcut');
+        }
+
+        // Task checkbox functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('.task-checkbox');
+            
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('click', function() {
+                    this.classList.toggle('completed');
+                    
+                    // Add animation
+                    if (this.classList.contains('completed')) {
+                        this.style.transform = 'scale(1.2)';
+                        setTimeout(() => {
+                            this.style.transform = 'scale(1)';
+                        }, 200);
+                        
+                        createToast('Görev tamamlandı! 🎉', 'success');
+                    } else {
+                        createToast('Görev aktif duruma getirildi', 'info');
+                    }
+                });
+            });
+        });
+
+        // Quick action animations
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                // Don't prevent default for actual links
+                if (this.getAttribute('href') === '#') {
+                    e.preventDefault();
+                }
+                
+                // Add click animation
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 150);
+                
+                // Show success message for placeholder links
+                if (this.getAttribute('href') === '#') {
+                    const messages = [
+                        'Yeni görev oluşturma paneli açılıyor...',
+                        'Takım davet penceresi hazırlanıyor...',
+                        'Rapor oluşturucu başlatılıyor...',
+                        'Arama özelliği aktifleştiriliyor...'
+                    ];
+                    
+                    const text = this.querySelector('span').textContent;
+                    let message = `${text} özelliği hazırlanıyor...`;
+                    
+                    createToast(message, 'success');
+                }
+            });
+        });
+
+        // File item interactions
+        document.querySelectorAll('.file-item').forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                this.style.boxShadow = 'var(--shadow)';
+            });
+            
+            item.addEventListener('mouseleave', function() {
+                this.style.boxShadow = 'none';
+            });
+        });
+
+        // File action click tracking
+        document.querySelectorAll('.file-action').forEach(action => {
+            action.addEventListener('click', function(e) {
+                e.stopPropagation();
+                
+                const actionType = this.classList.contains('view') ? 'görüntülendi' : 'indirildi';
+                const fileName = this.closest('.file-item').querySelector('.file-title').textContent;
+                
+                createToast(`${fileName} ${actionType}`, 'info');
+            });
+        });
+
+        // Toast notification function
+        function createToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            const colors = {
+                success: 'var(--success-color)',
+                error: 'var(--danger-color)',
+                warning: 'var(--warning-color)',
+                info: 'var(--info-color)'
+            };
+            
+            const icons = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                warning: 'fa-exclamation-triangle',
+                info: 'fa-info-circle'
+            };
+            
+            toast.innerHTML = `
+                <div style="
+                    position: fixed;
+                    top: 2rem;
+                    right: 2rem;
+                    background: ${colors[type]};
+                    color: white;
+                    padding: 1rem 1.5rem;
+                    border-radius: 0.5rem;
+                    box-shadow: var(--shadow-xl);
+                    z-index: 2000;
+                    animation: slideInRight 0.3s ease-out;
+                    max-width: 350px;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                ">
+                    <i class="fas ${icons[type]}"></i> ${message}
+                </div>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideInRight 0.3s ease-out reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Auto-refresh stats every 60 seconds
+        setInterval(() => {
+            fetch('/api/stats')
+                .then(response => response.json())
+                .then(data => {
+                    // Update stats if they changed
+                    document.querySelectorAll('.stat-value').forEach((elem, index) => {
+                        const keys = ['pending_tasks', 'completed_tasks', 'viewed_files', 'downloaded_files', 'completion_rate'];
+                        if (keys[index] && data[keys[index]]) {
+                            const newValue = keys[index] === 'completion_rate' ? `${data[keys[index]]}%` : data[keys[index]];
+                            if (elem.textContent !== newValue.toString()) {
+                                elem.textContent = newValue;
+                                elem.style.animation = 'pulse 0.5s';
+                            }
+                        }
+                    });
+                })
+                .catch(error => console.log('Stats refresh error:', error));
+        }, 60000);
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl + / for help
+            if (e.ctrlKey && e.key === '/') {
+                e.preventDefault();
+                alert('⌨️ Klavye Kısayolları:\n\nCtrl + / : Bu yardım\nCtrl + F : Dosya ara\nF5 : Sayfayı yenile\nEsc : Menüleri kapat\nCtrl + D : Dashboard');
+            }
+            
+            // Ctrl + F for file search
+            if (e.ctrlKey && e.key === 'f') {
+                e.preventDefault();
+                window.location.href = '/files';
+            }
+            
+            // Ctrl + D for dashboard
+            if (e.ctrlKey && e.key === 'd') {
+                e.preventDefault();
+                window.location.href = '/';
+            }
+            
+            // Escape to close dropdowns
+            if (e.key === 'Escape') {
+                const dropdown = document.getElementById('userMenuDropdown');
+                if (dropdown) {
+                    dropdown.style.display = 'none';
+                }
+            }
+        });
+
+        // Welcome animation on load
+        window.addEventListener('load', function() {
+            const welcomeSection = document.querySelector('.welcome-section');
+            if (welcomeSection) {
+                setTimeout(() => {
+                    welcomeSection.style.transform = 'translateY(-2px)';
+                    setTimeout(() => {
+                        welcomeSection.style.transform = 'translateY(0)';
+                    }, 300);
+                }, 500);
+            }
+        });
+
+        // Statistics counter animation
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-value, .welcome-stat-number');
+            
+            counters.forEach(counter => {
+                const target = parseInt(counter.textContent.replace(/[^\d]/g, ''));
+                if (isNaN(target)) return;
+                
+                let current = 0;
+                const increment = target / 50;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        counter.textContent = counter.textContent.includes('%') ? `${target}%` : target;
+                        clearInterval(timer);
+                    } else {
+                        const displayValue = Math.floor(current);
+                        counter.textContent = counter.textContent.includes('%') ? `${displayValue}%` : displayValue;
+                    }
+                }, 20);
+            });
+        }
+
+        // Run counter animation on page load
+        setTimeout(animateCounters, 1000);
+
+        // Activity item hover effects
+        document.querySelectorAll('.activity-item, .task-item, .file-item').forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateX(5px)';
+            });
+            
+            item.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateX(0)';
+            });
+        });
+
+        // File category color coding
+        function updateFileIcons() {
+            document.querySelectorAll('.file-icon').forEach(icon => {
+                const type = icon.classList[1];
+                const iconElement = icon.querySelector('i');
+                
+                // Update icon classes based on file type
+                switch(type) {
+                    case 'pdf':
+                        iconElement.className = 'fas fa-file-pdf';
+                        break;
+                    case 'doc':
+                    case 'docx':
+                        iconElement.className = 'fas fa-file-word';
+                        break;
+                    case 'xls':
+                    case 'xlsx':
+                        iconElement.className = 'fas fa-file-excel';
+                        break;
+                    case 'png':
+                    case 'jpg':
+                    case 'jpeg':
+                    case 'gif':
+                        iconElement.className = 'fas fa-file-image';
+                        icon.classList.remove(type);
+                        icon.classList.add('img');
+                        break;
+                    default:
+                        iconElement.className = 'fas fa-file-alt';
+                }
+            });
+        }
+
+        // Initialize file icons
+        document.addEventListener('DOMContentLoaded', updateFileIcons);
+
+        // Add pulse animation for stats updates
+        const pulseStyle = document.createElement('style');
+        pulseStyle.textContent = `
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.05); background: var(--primary-color); color: white; }
+                100% { transform: scale(1); }
+            }
+        `;
+        document.head.appendChild(pulseStyle);
+
+        // Console welcome message
+        console.log(`
+🏢 TechCorp Enterprise Dashboard
+═══════════════════════════════
+👋 Hoş geldiniz {{ user.first_name }} {{ user.last_name }}!
+📊 Database File System Dashboard
+🏷️ Rol: {{ user.role|title }}
+📅 ${new Date().toLocaleDateString('tr-TR')}
+⌨️  Klavye kısayolları: Ctrl + /
+📁 Dosya sistemi: Database-driven
+        `);
+
+        // Performance monitoring
+        window.addEventListener('load', function() {
+            const loadTime = performance.now();
+            console.log(`⚡ Dashboard yüklenme süresi: ${Math.round(loadTime)}ms`);
+            
+            // Log memory usage if available
+            if (performance.memory) {
+                console.log(`💾 Bellek kullanımı: ${Math.round(performance.memory.usedJSHeapSize / 1024 / 1024)}MB`);
+            }
+        });
+
+        // Error handling for fetch requests
+        window.addEventListener('unhandledrejection', function(event) {
+            console.error('Yakalanmamış promise hatası:', event.reason);
+            createToast('Bir hata oluştu. Lütfen sayfayı yenileyin.', 'error');
+        });
+
+        // Online/offline status
+        window.addEventListener('online', function() {
+            createToast('İnternet bağlantısı yeniden kuruldu', 'success');
+        });
+
+        window.addEventListener('offline', function() {
+            createToast('İnternet bağlantısı kesildi', 'warning');
+        });
+
+        // Page visibility API for performance
+        document.addEventListener('visibilitychange', function() {
+            if (document.visibilityState === 'visible') {
+                console.log('Dashboard aktif oldu');
+                // Refresh stats when page becomes visible
+                setTimeout(() => {
+                    fetch('/api/stats').then(response => response.json()).then(data => {
+                        console.log('Stats refreshed on visibility');
+                    }).catch(e => {});
+                }, 1000);
+            } else {
+                console.log('Dashboard arka plana geçti');
+            }
+        });
+
+        // Memory cleanup on page unload
+        window.addEventListener('beforeunload', function() {
+            // Clear any intervals or timeouts
+            console.log('Dashboard temizleniyor...');
+        });
+
+        // Initialize tooltips for file actions
+        document.querySelectorAll('.file-action').forEach(action => {
+            const isView = action.classList.contains('view');
+            const tooltip = isView ? 'Dosyayı görüntüle' : 'Dosyayı indir';
+            action.title = tooltip;
+        });
+
+        // Add smooth scrolling for better UX
+        document.documentElement.style.scrollBehavior = 'smooth';
+    </script>
+</body>
+</html>

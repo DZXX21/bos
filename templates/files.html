@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechCorp - Dosya Yöneticisi</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary-color: #64748b;
+            --success-color: #059669;
+            --warning-color: #d97706;
+            --danger-color: #dc2626;
+            --info-color: #0284c7;
+            --light-bg: #f8fafc;
+            --white: #ffffff;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--light-bg);
+            color: var(--gray-900);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--primary-color);
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray-600);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .nav-item a:hover { color: var(--primary-color); background-color: var(--gray-50); }
+        .nav-item.active a { color: var(--primary-color); background-color: rgb(37 99 235 / 0.1); }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            border: 1px solid var(--gray-200);
+            background: var(--white);
+        }
+
+        .user-avatar {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--info-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .user-info { display: flex; flex-direction: column; }
+        .user-name { font-weight: 600; font-size: 0.9rem; color: var(--gray-900); }
+        .user-role { font-size: 0.75rem; color: var(--gray-600); }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: var(--gray-600);
+            font-size: 1.1rem;
+        }
+
+        .page-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .filters-section {
+            background: var(--white);
+            border-radius: 0.75rem;
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            display: grid;
+            grid-template-columns: 1fr auto auto auto;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
+        }
+
+        .category-filter {
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 0.5rem;
+            background: var(--white);
+            font-size: 1rem;
+            min-width: 200px;
+        }
+
+        .category-filter:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .sort-select {
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 0.5rem;
+            background: var(--white);
+            font-size: 1rem;
+            min-width: 150px;
+        }
+
+        .sort-select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .view-toggle {
+            display: flex;
+            background: var(--gray-100);
+            border-radius: 0.5rem;
+            padding: 0.25rem;
+        }
+
+        .view-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            background: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .view-btn.active {
+            background: var(--white);
+            color: var(--primary-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .category-card {
+            background: var(--white);
+            border-radius: 0.75rem;
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            transition: all 0.3s;
+            cursor: pointer;
+            border-left: 4px solid var(--primary-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--info-color));
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .category-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .category-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .category-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .category-icon {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 0.75rem;
+            background: rgb(37 99 235 / 0.1);
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .category-card:hover .category-icon {
+            transform: scale(1.1);
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .category-details h3 {
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .category-details p {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        .category-stats {
+            background: var(--gray-50);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            transition: all 0.3s;
+        }
+
+        .category-card:hover .category-stats {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .files-section {
+            background: var(--white);
+            border-radius: 0.75rem;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .section-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, var(--gray-50), var(--white));
+        }
+
+        .section-title {
+            font-weight: 600;
+            color: var(--gray-900);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .files-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            padding: 1.5rem;
+        }
+
+        .files-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--gray-100);
+            transition: all 0.2s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .file-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--primary-color);
+            transform: scaleY(0);
+            transition: transform 0.2s;
+        }
+
+        .file-item:hover {
+            background: var(--gray-50);
+            transform: translateX(5px);
+        }
+
+        .file-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .file-item:last-child {
+            border-bottom: none;
+        }
+
+        .file-card {
+            background: var(--gray-50);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(37, 99, 235, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s;
+            opacity: 0;
+        }
+
+        .file-card:hover {
+            background: var(--white);
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .file-card:hover::before {
+            opacity: 1;
+            right: 100%;
+        }
+
+        .file-icon {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            transition: all 0.3s;
+            position: relative;
+            z-index: 1;
+        }
+
+        .file-icon.pdf { background: rgb(220 38 38 / 0.1); color: var(--danger-color); }
+        .file-icon.doc, .file-icon.docx { background: rgb(37 99 235 / 0.1); color: var(--primary-color); }
+        .file-icon.xls, .file-icon.xlsx { background: rgb(5 150 105 / 0.1); color: var(--success-color); }
+        .file-icon.pptx { background: rgb(217 119 6 / 0.1); color: var(--warning-color); }
+        .file-icon.img, .file-icon.png, .file-icon.jpg, .file-icon.jpeg { background: rgb(168 85 247 / 0.1); color: #a855f7; }
+        .file-icon.txt { background: rgb(107 114 128 / 0.1); color: var(--gray-600); }
+        .file-icon.zip, .file-icon.rar { background: rgb(75 85 99 / 0.1); color: var(--gray-600); }
+
+        .file-item:hover .file-icon,
+        .file-card:hover .file-icon {
+            transform: scale(1.1);
+        }
+
+        .file-content {
+            flex: 1;
+            min-width: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .file-title {
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .file-meta {
+            font-size: 0.85rem;
+            color: var(--gray-600);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .file-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .file-description {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            line-height: 1.4;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 0.5rem;
+            opacity: 0;
+            transition: all 0.2s;
+            position: relative;
+            z-index: 2;
+        }
+
+        .file-item:hover .file-actions,
+        .file-card:hover .file-actions {
+            opacity: 1;
+        }
+
+        .file-action {
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .file-action.view {
+            background: rgb(37 99 235 / 0.1);
+            color: var(--primary-color);
+        }
+
+        .file-action.download {
+            background: rgb(5 150 105 / 0.1);
+            color: var(--success-color);
+        }
+
+        .file-action.delete {
+            background: rgb(220 38 38 / 0.1);
+            color: var(--danger-color);
+        }
+
+        .file-action:hover {
+            transform: scale(1.1);
+        }
+
+        .file-tags {
+            margin-top: 0.5rem;
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .file-tag {
+            background: var(--gray-100);
+            color: var(--gray-700);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .file-tag:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray-500);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #047857;
+            transform: translateY(-1px);
+        }
+
+        .upload-area {
+            border: 2px dashed var(--gray-300);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            text-align: center;
+            background: var(--gray-50);
+            transition: all 0.3s;
+            margin-bottom: 2rem;
+        }
+
+        .upload-area.dragover {
+            border-color: var(--primary-color);
+            background: rgb(37 99 235 / 0.05);
+        }
+
+        .upload-area i {
+            font-size: 3rem;
+            color: var(--gray-400);
+            margin-bottom: 1rem;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .file-progress {
+            margin-top: 0.5rem;
+            background: var(--gray-200);
+            border-radius: 0.25rem;
+            overflow: hidden;
+            height: 0.5rem;
+        }
+
+        .file-progress-bar {
+            height: 100%;
+            background: var(--primary-color);
+            transition: width 0.3s;
+        }
+
+        @media (max-width: 768px) {
+            .main-container { padding: 1rem; }
+            .filters-section { grid-template-columns: 1fr; }
+            .categories-grid { grid-template-columns: 1fr; }
+            .files-grid { grid-template-columns: 1fr; }
+            .nav-menu { display: none; }
+            .page-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+            .page-actions { width: 100%; justify-content: flex-start; }
+        }
+
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <div class="logo">
+                <i class="fas fa-building"></i>
+                <span>TechCorp</span>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="{{ url_for('dashboard') }}"><i class="fas fa-home"></i> Dashboard</a>
+                </li>
+                <li class="nav-item active">
+                    <a href="{{ url_for('files') }}"><i class="fas fa-folder"></i> Dosyalar</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('profile') }}"><i class="fas fa-user"></i> Profil</a>
+                </li>
+                {% if session.user_role == 'admin' %}
+                <li class="nav-item">
+                    <a href="{{ url_for('admin_panel') }}"><i class="fas fa-shield-alt"></i> Admin</a>
+                </li>
+                {% endif %}
+            </ul>
+            
+            <div class="user-menu">
+                <div class="user-profile">
+                    <div class="user-avatar">{{ user.first_name[0] }}{{ user.last_name[0] }}</div>
+                    <div class="user-info">
+                        <div class="user-name">{{ user.first_name }} {{ user.last_name }}</div>
+                        <div class="user-role">{{ user.role|title }}</div>
+                    </div>
+                </div>
+                
+                <a href="{{ url_for('logout') }}" class="btn btn-primary">
+                    <i class="fas fa-sign-out-alt"></i> Çıkış
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="main-container">
+        <div class="page-header fade-in">
+            <div>
+                <h1 class="page-title">📁 Dosya Yöneticisi</h1>
+                <p class="page-subtitle">Kurumsal dosyalarınızı yönetin ve paylaşın</p>
+            </div>
+            <div class="page-actions">
+                {% if session.user_role == 'admin' %}
+                <a href="{{ url_for('admin_upload') }}" class="btn btn-success">
+                    <i class="fas fa-plus"></i> Dosya Yükle
+                </a>
+                {% endif %}
+                <button onclick="refreshFiles()" class="btn btn-primary">
+                    <i class="fas fa-sync-alt"></i> Yenile
+                </button>
+            </div>
+        </div>
+
+        <div class="filters-section fade-in">
+            <div class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" 
+                       class="search-input" 
+                       placeholder="Dosya ara..." 
+                       value="{{ search_query or '' }}"
+                       onkeyup="searchFiles(this.value)">
+            </div>
+            
+            <select class="category-filter" onchange="filterByCategory(this.value)">
+                <option value="">Tüm Kategoriler</option>
+                {% for category in categories %}
+                <option value="{{ category.id }}" {% if selected_category == category.id|string %}selected{% endif %}>
+                    {{ category.name }}
+                </option>
+                {% endfor %}
+            </select>
+
+            <select class="sort-select" onchange="sortFiles(this.value)">
+                <option value="date_desc">En Yeni</option>
+                <option value="date_asc">En Eski</option>
+                <option value="name_asc">İsim (A-Z)</option>
+                <option value="name_desc">İsim (Z-A)</option>
+                <option value="size_desc">Boyut (Büyük)</option>
+                <option value="size_asc">Boyut (Küçük)</option>
+                <option value="popular">En Popüler</option>
+            </select>
+            
+            <div class="view-toggle">
+                <button class="view-btn active" onclick="toggleView('list')" title="Liste Görünümü">
+                    <i class="fas fa-list"></i>
+                </button>
+                <button class="view-btn" onclick="toggleView('grid')" title="Kart Görünümü">
+                    <i class="fas fa-th"></i>
+                </button>
+            </div>
+        </div>
+
+        {% if categories %}
+        <div class="categories-grid fade-in">
+            {% for category in categories %}
+            <div class="category-card" onclick="filterByCategory({{ category.id }})">
+                <div class="category-header">
+                    <div class="category-info">
+                        <div class="category-icon">
+                            <i class="{{ category.icon }}"></i>
+                        </div>
+                        <div class="category-details">
+                            <h3>{{ category.name }}</h3>
+                            <p>{{ category.description }}</p>
+                        </div>
+                    </div>
+                    <div class="category-stats">
+                        {% set category_files = files|selectattr('category_id', 'equalto', category.id)|list %}
+                        {{ category_files|length }} dosya
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="files-section fade-in">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-file-alt"></i>
+                    Dosyalar
+                    {% if search_query %}
+                        - "{{ search_query }}" için sonuçlar
+                    {% elif selected_category %}
+                        {% for category in categories if category.id|string == selected_category %}
+                            - {{ category.name }}
+                        {% endfor %}
+                    {% endif %}
+                </h2>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <span style="color: var(--gray-600); font-size: 0.9rem;">
+                        {{ files|length }} dosya bulundu
+                    </span>
+                    <div class="loading-spinner" id="loading-spinner" style="display: none;"></div>
+                </div>
+            </div>
+
+            {% if files %}
+                <div id="files-container">
+                    <div class="files-list" id="list-view">
+                        {% for file in files %}
+                        <div class="file-item" onclick="viewFile({{ file.id }})" data-file-id="{{ file.id }}">
+                            <div class="file-icon {{ file.file_type }}">
+                                <i class="{{ get_file_icon(file.file_type) }}"></i>
+                            </div>
+                            <div class="file-content">
+                                <div class="file-title">{{ file.title }}</div>
+                                <div class="file-meta">
+                                    <div class="file-meta-item">
+                                        <i class="fas fa-folder"></i>
+                                        {{ file.category_name or 'Uncategorized' }}
+                                    </div>
+                                    <div class="file-meta-item">
+                                        <i class="fas fa-user"></i>
+                                        {{ file.author or 'Unknown' }}
+                                    </div>
+                                    <div class="file-meta-item">
+                                        <i class="fas fa-hdd"></i>
+                                        {{ format_file_size(file.file_size) }}
+                                    </div>
+                                    <div class="file-meta-item">
+                                        <i class="fas fa-eye"></i>
+                                        {{ file.download_count + file.view_count }} erişim
+                                    </div>
+                                    <div class="file-meta-item">
+                                        <i class="fas fa-clock"></i>
+                                        {{ file.created_at[:10] }}
+                                    </div>
+                                </div>
+                                {% if file.description %}
+                                <div class="file-description">{{ file.description }}</div>
+                                {% endif %}
+                                {% if file.tags %}
+                                <div class="file-tags">
+                                    {% for tag in file.tags.split(',') %}
+                                    <span class="file-tag" onclick="searchByTag('{{ tag.strip() }}')">{{ tag.strip() }}</span>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="file-actions">
+                                <a href="/view/{{ file.id }}" class="file-action view" onclick="event.stopPropagation()" title="Görüntüle">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="/download/{{ file.id }}" class="file-action download" onclick="event.stopPropagation()" title="İndir">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                                {% if session.user_role == 'admin' %}
+                                <button class="file-action delete" onclick="deleteFile({{ file.id }}); event.stopPropagation()" title="Sil">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="files-grid" id="grid-view" style="display: none;">
+                        {% for file in files %}
+                        <div class="file-card" onclick="viewFile({{ file.id }})" data-file-id="{{ file.id }}">
+                            <div style="display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1rem;">
+                                <div class="file-icon {{ file.file_type }}">
+                                    <i class="{{ get_file_icon(file.file_type) }}"></i>
+                                </div>
+                                <div class="file-content" style="flex: 1;">
+                                    <div class="file-title">{{ file.title }}</div>
+                                    <div class="file-meta">
+                                        <div class="file-meta-item">
+                                            <i class="fas fa-folder"></i>
+                                            {{ file.category_name or 'Uncategorized' }}
+                                        </div>
+                                        <div class="file-meta-item">
+                                            <i class="fas fa-hdd"></i>
+                                            {{ format_file_size(file.file_size) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="file-actions">
+                                    <a href="/view/{{ file.id }}" class="file-action view" onclick="event.stopPropagation()" title="Görüntüle">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="/download/{{ file.id }}" class="file-action download" onclick="event.stopPropagation()" title="İndir">
+                                        <i class="fas fa-download"></i>
+                                    </a>
+                                    {% if session.user_role == 'admin' %}
+                                    <button class="file-action delete" onclick="deleteFile({{ file.id }}); event.stopPropagation()" title="Sil">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% if file.description %}
+                            <div class="file-description">{{ file.description }}</div>
+                            {% endif %}
+                            {% if file.tags %}
+                            <div class="file-tags">
+                                {% for tag in file.tags.split(',') %}
+                                <span class="file-tag" onclick="searchByTag('{{ tag.strip() }}')">{{ tag.strip() }}</span>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-folder-open"></i>
+                    <h3>Dosya Bulunamadı</h3>
+                    <p>
+                        {% if search_query %}
+                            "{{ search_query }}" araması için sonuç bulunamadı.
+                        {% elif selected_category %}
+                            Bu kategoride henüz dosya bulunmuyor.
+                        {% else %}
+                            Henüz dosya yüklenmemiş.
+                        {% endif %}
+                    </p>
+                    {% if session.user_role == 'admin' %}
+                    <div style="margin-top: 1rem;">
+                        <a href="{{ url_for('admin_upload') }}" class="btn btn-success">
+                            <i class="fas fa-plus"></i> İlk Dosyayı Yükle
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- File Upload Modal -->
+    {% if session.user_role == 'admin' %}
+    <div id="uploadModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 3000; align-items: center; justify-content: center;">
+        <div style="background: white; border-radius: 0.75rem; padding: 2rem; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1.25rem; font-weight: 600;">Dosya Yükle</h3>
+                <button onclick="closeUploadModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="uploadForm" enctype="multipart/form-data">
+                <div class="upload-area" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Dosyayı buraya sürükleyin veya tıklayın</p>
+                    <input type="file" id="fileInput" style="display: none;" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.pptx,.txt,.png,.jpg,.jpeg,.gif,.zip,.rar">
+                </div>
+                
+                <div id="fileList" style="margin-top: 1rem;"></div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Kategori</label>
+                        <select id="categorySelect" style="width: 100%; padding: 0.5rem; border: 1px solid var(--gray-300); border-radius: 0.25rem;">
+                            <option value="">Kategori Seçin</option>
+                            {% for category in categories %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Erişim Seviyesi</label>
+                        <select id="accessSelect" style="width: 100%; padding: 0.5rem; border: 1px solid var(--gray-300); border-radius: 0.25rem;">
+                            <option value="employee">Employee</option>
+                            <option value="manager">Manager</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Etiketler</label>
+                    <input type="text" id="tagsInput" placeholder="etiket1, etiket2, etiket3" style="width: 100%; padding: 0.5rem; border: 1px solid var(--gray-300); border-radius: 0.25rem;">
+                </div>
+                
+                <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                    <button type="button" onclick="closeUploadModal()" class="btn" style="flex: 1; background: var(--gray-200); color: var(--gray-700);">
+                        İptal
+                    </button>
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">
+                        <i class="fas fa-upload"></i> Yükle
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+
+    <script>
+        // Global variables
+        let currentSort = 'date_desc';
+        let uploadQueue = [];
+
+        // View toggle functionality
+        function toggleView(viewType) {
+            const listView = document.getElementById('list-view');
+            const gridView = document.getElementById('grid-view');
+            const buttons = document.querySelectorAll('.view-btn');
+            
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            if (viewType === 'grid') {
+                listView.style.display = 'none';
+                gridView.style.display = 'grid';
+                buttons[1].classList.add('active');
+            } else {
+                listView.style.display = 'flex';
+                gridView.style.display = 'none';
+                buttons[0].classList.add('active');
+            }
+            
+            localStorage.setItem('filesViewType', viewType);
+        }
+
+        // Search functionality with debouncing
+        let searchTimeout;
+        function searchFiles(query) {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                const url = new URL(window.location);
+                if (query.trim()) {
+                    url.searchParams.set('search', query);
+                } else {
+                    url.searchParams.delete('search');
+                }
+                showLoading();
+                window.location.href = url.toString();
+            }, 500);
+        }
+
+        // Category filter
+        function filterByCategory(categoryId) {
+            const url = new URL(window.location);
+            if (categoryId) {
+                url.searchParams.set('category', categoryId);
+            } else {
+                url.searchParams.delete('category');
+            }
+            url.searchParams.delete('search');
+            showLoading();
+            window.location.href = url.toString();
+        }
+
+        // Sort functionality
+        function sortFiles(sortBy) {
+            currentSort = sortBy;
+            const container = document.querySelector('#list-view, #grid-view:not([style*="display: none"])');
+            const items = Array.from(container.children);
+            
+            items.sort((a, b) => {
+                const aTitle = a.querySelector('.file-title').textContent;
+                const bTitle = b.querySelector('.file-title').textContent;
+                
+                switch(sortBy) {
+                    case 'name_asc':
+                        return aTitle.localeCompare(bTitle);
+                    case 'name_desc':
+                        return bTitle.localeCompare(aTitle);
+                    case 'date_asc':
+                    case 'date_desc':
+                        // Would need actual dates from backend
+                        return sortBy === 'date_desc' ? -1 : 1;
+                    case 'size_asc':
+                    case 'size_desc':
+                        // Would need actual sizes for proper sorting
+                        return sortBy === 'size_desc' ? -1 : 1;
+                    case 'popular':
+                        // Sort by view/download count
+                        return -1;
+                    default:
+                        return 0;
+                }
+            });
+            
+            // Re-append sorted items
+            items.forEach(item => container.appendChild(item));
+            
+            // Add animation
+            items.forEach((item, index) => {
+                item.style.animation = `fadeIn 0.3s ease-in ${index * 0.05}s both`;
+            });
+        }
+
+        // View file
+        function viewFile(fileId) {
+            window.open(`/view/${fileId}`, '_blank');
+        }
+
+        // Search by tag
+        function searchByTag(tag, event) {
+            if (event) event.stopPropagation();
+            document.querySelector('.search-input').value = tag;
+            searchFiles(tag);
+        }
+
+        // Delete file (admin only)
+        function deleteFile(fileId) {
+            if (!confirm('Bu dosyayı silmek istediğinizden emin misiniz?')) {
+                return;
+            }
+            
+            fetch(`/admin/delete-file/${fileId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Remove file item from DOM
+                    const fileItems = document.querySelectorAll(`[data-file-id="${fileId}"]`);
+                    fileItems.forEach(item => {
+                        item.style.animation = 'fadeOut 0.3s ease-out';
+                        setTimeout(() => item.remove(), 300);
+                    });
+                    createToast('Dosya başarıyla silindi', 'success');
+                } else {
+                    createToast('Dosya silinirken hata oluştu', 'error');
+                }
+            })
+            .catch(error => {
+                createToast('Bağlantı hatası', 'error');
+            });
+        }
+
+        // Refresh files
+        function refreshFiles() {
+            showLoading();
+            setTimeout(() => {
+                window.location.reload();
+            }, 500);
+        }
+
+        // Show loading spinner
+        function showLoading() {
+            const spinner = document.getElementById('loading-spinner');
+            if (spinner) {
+                spinner.style.display = 'block';
+            }
+        }
+
+        // Upload modal functions
+        function openUploadModal() {
+            document.getElementById('uploadModal').style.display = 'flex';
+        }
+
+        function closeUploadModal() {
+            document.getElementById('uploadModal').style.display = 'none';
+            document.getElementById('uploadForm').reset();
+            document.getElementById('fileList').innerHTML = '';
+            uploadQueue = [];
+        }
+
+        // Drag and drop functionality
+        function initDragDrop() {
+            const uploadArea = document.getElementById('uploadArea');
+            const fileInput = document.getElementById('fileInput');
+            
+            if (!uploadArea) return;
+
+            uploadArea.addEventListener('click', () => fileInput.click());
+            
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+            
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('dragover');
+            });
+            
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                handleFiles(e.dataTransfer.files);
+            });
+            
+            fileInput.addEventListener('change', (e) => {
+                handleFiles(e.target.files);
+            });
+        }
+
+        function handleFiles(files) {
+            uploadQueue = Array.from(files);
+            displayFileList();
+        }
+
+        function displayFileList() {
+            const fileList = document.getElementById('fileList');
+            fileList.innerHTML = '';
+            
+            uploadQueue.forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.style.cssText = `
+                    display: flex; 
+                    align-items: center; 
+                    justify-content: space-between; 
+                    padding: 0.5rem; 
+                    background: var(--gray-50); 
+                    border-radius: 0.25rem; 
+                    margin-bottom: 0.5rem;
+                `;
+                
+                fileItem.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-file"></i>
+                        <span>${file.name}</span>
+                        <span style="color: var(--gray-600); font-size: 0.8rem;">(${formatFileSize(file.size)})</span>
+                    </div>
+                    <button type="button" onclick="removeFromQueue(${index})" style="background: none; border: none; color: var(--danger-color); cursor: pointer;">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                
+                fileList.appendChild(fileItem);
+            });
+        }
+
+        function removeFromQueue(index) {
+            uploadQueue.splice(index, 1);
+            displayFileList();
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        }
+
+        // Handle upload form submission
+        function initUploadForm() {
+            const form = document.getElementById('uploadForm');
+            if (!form) return;
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                if (uploadQueue.length === 0) {
+                    createToast('Lütfen dosya seçin', 'warning');
+                    return;
+                }
+                
+                const formData = new FormData();
+                uploadQueue.forEach(file => {
+                    formData.append('files', file);
+                });
+                
+                formData.append('category_id', document.getElementById('categorySelect').value);
+                formData.append('access_level', document.getElementById('accessSelect').value);
+                formData.append('tags', document.getElementById('tagsInput').value);
+                
+                try {
+                    const response = await fetch('/admin/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    if (response.ok) {
+                        createToast('Dosyalar başarıyla yüklendi', 'success');
+                        closeUploadModal();
+                        setTimeout(() => window.location.reload(), 1000);
+                    } else {
+                        const error = await response.text();
+                        createToast('Yükleme hatası: ' + error, 'error');
+                    }
+                } catch (error) {
+                    createToast('Bağlantı hatası', 'error');
+                }
+            });
+        }
+
+        // Toast notifications
+        function createToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            const colors = {
+                success: 'var(--success-color)',
+                error: 'var(--danger-color)',
+                warning: 'var(--warning-color)',
+                info: 'var(--info-color)'
+            };
+            
+            const icons = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                warning: 'fa-exclamation-triangle',
+                info: 'fa-info-circle'
+            };
+            
+            toast.innerHTML = `
+                <div style="
+                    position: fixed;
+                    top: 2rem;
+                    right: 2rem;
+                    background: ${colors[type]};
+                    color: white;
+                    padding: 1rem 1.5rem;
+                    border-radius: 0.5rem;
+                    box-shadow: var(--shadow-xl);
+                    z-index: 2000;
+                    animation: slideInRight 0.3s ease-out;
+                    max-width: 350px;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                ">
+                    <i class="fas ${icons[type]}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideInRight 0.3s ease-out reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // File action tracking
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load saved view preference
+            const savedView = localStorage.getItem('filesViewType');
+            if (savedView) {
+                toggleView(savedView);
+            }
+
+            // Initialize drag & drop and upload form
+            initDragDrop();
+            initUploadForm();
+
+            // File action tracking
+            document.querySelectorAll('.file-action').forEach(action => {
+                action.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    
+                    if (this.classList.contains('delete')) return; // Skip for delete buttons
+                    
+                    const actionType = this.classList.contains('view') ? 'görüntülendi' : 'indirildi';
+                    const fileName = this.closest('.file-item, .file-card').querySelector('.file-title').textContent;
+                    
+                    createToast(`${fileName} ${actionType}`, 'info');
+                });
+            });
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                // Ctrl + F for search focus
+                if (e.ctrlKey && e.key === 'f') {
+                    e.preventDefault();
+                    document.querySelector('.search-input').focus();
+                }
+                
+                // Ctrl + U for upload (admin only)
+                if (e.ctrlKey && e.key === 'u' && document.getElementById('uploadModal')) {
+                    e.preventDefault();
+                    openUploadModal();
+                }
+                
+                // Escape to close modals
+                if (e.key === 'Escape') {
+                    const modal = document.getElementById('uploadModal');
+                    if (modal && modal.style.display === 'flex') {
+                        closeUploadModal();
+                    }
+                    document.querySelector('.search-input').value = '';
+                }
+            });
+
+            // Category card hover effects
+            document.querySelectorAll('.category-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.borderLeftColor = 'var(--primary-color)';
+                    this.style.borderLeftWidth = '6px';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.borderLeftWidth = '4px';
+                });
+            });
+
+            // File item animations on scroll
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+
+            document.querySelectorAll('.file-item, .file-card').forEach(item => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(20px)';
+                item.style.transition = 'opacity 0.5s, transform 0.5s';
+                observer.observe(item);
+            });
+        });
+
+        // Console welcome message
+        console.log(`
+📁 TechCorp File Manager
+═══════════════════════
+🎯 {{ files|length }} dosya yüklü
+🔍 Arama: Ctrl + F
+{% if session.user_role == 'admin' %}📤 Yükleme: Ctrl + U{% endif %}
+⌨️  Kısayollar: ESC (temizle)
+🏷️  Etiket tıklayarak arama yapabilirsiniz
+        `);
+
+        // Performance monitoring
+        window.addEventListener('load', function() {
+            const loadTime = performance.now();
+            console.log(`⚡ Sayfa yükleme süresi: ${Math.round(loadTime)}ms`);
+        });
+
+        // Add fadeOut animation for deletions
+        const fadeOutStyle = document.createElement('style');
+        fadeOutStyle.textContent = `
+            @keyframes fadeOut {
+                from { opacity: 1; transform: scale(1); }
+                to { opacity: 0; transform: scale(0.8); }
+            }
+        `;
+        document.head.appendChild(fadeOutStyle);
+    </script>
+</body>
+</html>

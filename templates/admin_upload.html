@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechCorp - Dosya Yükle</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary-color: #64748b;
+            --success-color: #059669;
+            --warning-color: #d97706;
+            --danger-color: #dc2626;
+            --info-color: #0284c7;
+            --light-bg: #f8fafc;
+            --white: #ffffff;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--light-bg) 0%, #e0f2fe 100%);
+            color: var(--gray-900);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray-600);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .nav-item a:hover { color: var(--primary-color); background-color: var(--gray-50); }
+        .nav-item.active a { color: var(--primary-color); background-color: rgb(37 99 235 / 0.1); }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            border: 1px solid var(--gray-200);
+            background: var(--white);
+        }
+
+        .user-avatar {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--info-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .user-info { display: flex; flex-direction: column; }
+        .user-name { font-weight: 600; font-size: 0.9rem; color: var(--gray-900); }
+        .user-role { font-size: 0.75rem; color: var(--gray-600); }
+
+        .main-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--info-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            color: var(--gray-600);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            color: var(--gray-500);
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .upload-container {
+            background: var(--white);
+            border-radius: 1rem;
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            border: 1px solid var(--gray-200);
+        }
+
+        .upload-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--info-color));
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 50%);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-10px, -10px) rotate(180deg); }
+        }
+
+        .upload-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .upload-header p {
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .upload-content {
+            padding: 2rem;
+        }
+
+        .upload-area {
+            border: 3px dashed var(--gray-300);
+            border-radius: 0.75rem;
+            padding: 3rem 2rem;
+            text-align: center;
+            background: var(--gray-50);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .upload-area.dragover {
+            border-color: var(--primary-color);
+            background: rgb(37 99 235 / 0.05);
+            transform: scale(1.02);
+        }
+
+        .upload-area::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .upload-area:hover::before {
+            left: 100%;
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .upload-area:hover .upload-icon {
+            transform: scale(1.1);
+            color: var(--primary-dark);
+        }
+
+        .upload-text {
+            font-size: 1.1rem;
+            color: var(--gray-600);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .upload-hint {
+            font-size: 0.9rem;
+            color: var(--gray-500);
+            margin-bottom: 1rem;
+        }
+
+        .upload-formats {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .format-tag {
+            background: var(--gray-100);
+            color: var(--gray-700);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .file-list {
+            margin-bottom: 2rem;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: var(--gray-50);
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            border-left: 4px solid var(--primary-color);
+            transition: all 0.3s;
+        }
+
+        .file-item:hover {
+            background: var(--gray-100);
+            transform: translateX(5px);
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 1;
+        }
+
+        .file-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .file-icon.pdf { background: rgb(220 38 38 / 0.1); color: var(--danger-color); }
+        .file-icon.doc { background: rgb(37 99 235 / 0.1); color: var(--primary-color); }
+        .file-icon.xls { background: rgb(5 150 105 / 0.1); color: var(--success-color); }
+        .file-icon.pptx { background: rgb(217 119 6 / 0.1); color: var(--warning-color); }
+        .file-icon.img { background: rgb(168 85 247 / 0.1); color: #a855f7; }
+        .file-icon.txt { background: rgb(107 114 128 / 0.1); color: var(--gray-600); }
+
+        .file-details {
+            flex: 1;
+        }
+
+        .file-name {
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .file-size {
+            font-size: 0.85rem;
+            color: var(--gray-600);
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .file-action {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .file-action.remove {
+            background: rgb(220 38 38 / 0.1);
+            color: var(--danger-color);
+        }
+
+        .file-action.remove:hover {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 0.5rem;
+            background: var(--gray-200);
+            border-radius: 0.25rem;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+            border-radius: 0.25rem;
+            transition: width 0.3s;
+            width: 0%;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--gray-700);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            padding: 0.75rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: var(--white);
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-help {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            margin-top: 0.25rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-300);
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #047857;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .loading-spinner {
+            display: none;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .alert-success {
+            background: rgb(5 150 105 / 0.1);
+            color: var(--success-color);
+            border: 1px solid rgb(5 150 105 / 0.3);
+        }
+
+        .alert-error {
+            background: rgb(220 38 38 / 0.1);
+            color: var(--danger-color);
+            border: 1px solid rgb(220 38 38 / 0.3);
+        }
+
+        .alert-warning {
+            background: rgb(217 119 6 / 0.1);
+            color: var(--warning-color);
+            border: 1px solid rgb(217 119 6 / 0.3);
+        }
+
+        .upload-tips {
+            background: linear-gradient(135deg, var(--gray-50), var(--white));
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border-left: 4px solid var(--info-color);
+        }
+
+        .tips-title {
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tips-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tips-list li {
+            padding: 0.5rem 0;
+            color: var(--gray-600);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .tips-list li::before {
+            content: "💡";
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 768px) {
+            .main-container { padding: 1rem; }
+            .upload-content { padding: 1rem; }
+            .form-grid { grid-template-columns: 1fr; }
+            .action-buttons { flex-direction: column; }
+            .nav-menu { display: none; }
+        }
+
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .slide-up { animation: slideUp 0.5s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <a href="{{ url_for('dashboard') }}" class="logo">
+                <i class="fas fa-building"></i>
+                <span>TechCorp</span>
+            </a>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="{{ url_for('dashboard') }}"><i class="fas fa-home"></i> Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('files') }}"><i class="fas fa-folder"></i> Dosyalar</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('profile') }}"><i class="fas fa-user"></i> Profil</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('admin_panel') }}"><i class="fas fa-shield-alt"></i> Admin</a>
+                </li>
+            </ul>
+            
+            <div class="user-menu">
+                <div class="user-profile">
+                    <div class="user-avatar">{{ session.full_name[0] if session.full_name else 'A' }}</div>
+                    <div class="user-info">
+                        <div class="user-name">{{ session.full_name or 'Admin' }}</div>
+                        <div class="user-role">{{ session.user_role|title }}</div>
+                    </div>
+                </div>
+                
+                <a href="{{ url_for('logout') }}" class="btn btn-secondary">
+                    <i class="fas fa-sign-out-alt"></i> Çıkış
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="main-container">
+        <div class="page-header fade-in">
+            <h1 class="page-title">📤 Dosya Yükle</h1>
+            <p class="page-subtitle">Kurumsal dosya sistemine yeni dosyalar ekleyin</p>
+            <div class="breadcrumb">
+                <a href="{{ url_for('dashboard') }}">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="{{ url_for('files') }}">
+                    <i class="fas fa-folder"></i> Dosyalar
+                </a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Dosya Yükle</span>
+            </div>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ 'success' if category == 'success' else 'error' if category == 'error' else 'warning' }} fade-in">
+                    <i class="fas fa-{{ 'check-circle' if category == 'success' else 'exclamation-circle' if category == 'error' else 'exclamation-triangle' }}"></i>
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="upload-container slide-up">
+            <div class="upload-header">
+                <h2><i class="fas fa-cloud-upload-alt"></i> Dosya Yükleme Merkezi</h2>
+                <p>Dosyalarınızı sürükleyip bırakın veya seçin</p>
+            </div>
+
+            <div class="upload-content">
+                <form method="POST" enctype="multipart/form-data" id="uploadForm">
+                    <!-- Upload Area -->
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <div class="upload-text">
+                            Dosyaları buraya sürükleyin veya <strong>tıklayarak seçin</strong>
+                        </div>
+                        <div class="upload-hint">
+                            Maksimum dosya boyutu: 16MB
+                        </div>
+                        <div class="upload-formats">
+                            <span class="format-tag">PDF</span>
+                            <span class="format-tag">DOC/DOCX</span>
+                            <span class="format-tag">XLS/XLSX</span>
+                            <span class="format-tag">PPT/PPTX</span>
+                            <span class="format-tag">TXT</span>
+                            <span class="format-tag">PNG/JPG</span>
+                            <span class="format-tag">ZIP/RAR</span>
+                        </div>
+                        <input type="file" name="file" id="fileInput" style="display: none;" 
+                               accept=".pdf,.doc,.docx,.xls,.xlsx,.pptx,.txt,.png,.jpg,.jpeg,.gif,.zip,.rar">
+                    </div>
+
+                    <!-- File List -->
+                    <div class="file-list" id="fileList" style="display: none;">
+                        <h3 class="section-title">
+                            <i class="fas fa-list"></i> Seçilen Dosyalar
+                        </h3>
+                        <div id="selectedFiles"></div>
+                    </div>
+
+                    <!-- Form Fields -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-cog"></i> Dosya Bilgileri
+                        </h3>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label" for="title">
+                                    <i class="fas fa-heading"></i> Dosya Başlığı
+                                </label>
+                                <input type="text" name="title" id="title" class="form-input" 
+                                       placeholder="Dosya başlığını girin (boş bırakılırsa dosya adı kullanılır)">
+                                <div class="form-help">Dosyanın görüntüleneceği başlık</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="author">
+                                    <i class="fas fa-user-edit"></i> Yazar
+                                </label>
+                                <input type="text" name="author" id="author" class="form-input" 
+                                       placeholder="Dosya yazarı/oluşturanı">
+                                <div class="form-help">Dosyayı oluşturan kişi veya departman</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="category_id">
+                                    <i class="fas fa-folder"></i> Kategori
+                                </label>
+                                <select name="category_id" id="category_id" class="form-select">
+                                    <option value="">Kategori Seçin</option>
+                                    {% for category in categories %}
+                                    <option value="{{ category.id }}">
+                                        {{ category.name }} - {{ category.description }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                                <div class="form-help">Dosyanın ait olduğu kategori</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="department">
+                                    <i class="fas fa-building"></i> Departman
+                                </label>
+                                <select name="department" id="department" class="form-select">
+                                    <option value="">Departman Seçin</option>
+                                    {% for dept in departments %}
+                                    <option value="{{ dept }}">{{ dept }}</option>
+                                    {% endfor %}
+                                </select>
+                                <div class="form-help">Dosyanın ait olduğu departman</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="access_level">
+                                    <i class="fas fa-lock"></i> Erişim Seviyesi
+                                </label>
+                                <select name="access_level" id="access_level" class="form-select" required>
+                                    <option value="employee">Employee - Tüm çalışanlar</option>
+                                    <option value="manager">Manager - Sadece yöneticiler</option>
+                                    <option value="admin">Admin - Sadece yöneticiler</option>
+                                </select>
+                                <div class="form-help">Dosyaya kimler erişebilir</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="tags">
+                                    <i class="fas fa-tags"></i> Etiketler
+                                </label>
+                                <input type="text" name="tags" id="tags" class="form-input" 
+                                       placeholder="etiket1, etiket2, etiket3">
+                                <div class="form-help">Arama için etiketler (virgülle ayırın)</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="description">
+                                <i class="fas fa-align-left"></i> Açıklama
+                            </label>
+                            <textarea name="description" id="description" class="form-textarea" 
+                                      placeholder="Dosya hakkında detaylı açıklama yazın..."></textarea>
+                            <div class="form-help">Dosyanın içeriği ve amacı hakkında bilgi</div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <a href="{{ url_for('files') }}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Geri Dön
+                        </a>
+                        <button type="submit" class="btn btn-success" id="uploadBtn">
+                            <i class="fas fa-upload"></i>
+                            <span class="loading-spinner" id="loadingSpinner"></span>
+                            <span id="uploadText">Dosyayı Yükle</span>
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="clearForm()">
+                            <i class="fas fa-refresh"></i> Formu Temizle
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Upload Tips -->
+        <div class="upload-tips fade-in">
+            <h3 class="tips-title">
+                <i class="fas fa-lightbulb"></i> Dosya Yükleme İpuçları
+            </h3>
+            <ul class="tips-list">
+                <li>Dosya adlarında Türkçe karakter kullanmaktan kaçının</li>
+                <li>Dosya boyutunun 16MB'ı geçmediğinden emin olun</li>
+                <li>Uygun kategori ve erişim seviyesi seçmeyi unutmayın</li>
+                <li>Açıklayıcı etiketler ekleyerek dosyanızın bulunabilirliğini artırın</li>
+                <li>Önemli dosyalar için yedek kopyalarını da saklayın</li>
+                <li>Dosya adı ve açıklamasının anlaşılır olmasına dikkat edin</li>
+                <li>Gizli veya hassas bilgiler içeren dosyalar için uygun erişim seviyesi seçin</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let selectedFile = null;
+        let isUploading = false;
+
+        // DOM elements
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('fileList');
+        const selectedFiles = document.getElementById('selectedFiles');
+        const uploadForm = document.getElementById('uploadForm');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const uploadText = document.getElementById('uploadText');
+
+        // Initialize drag and drop
+        function initializeDragDrop() {
+            // Prevent default drag behaviors
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, preventDefaults, false);
+                document.body.addEventListener(eventName, preventDefaults, false);
+            });
+
+            // Highlight drop area when item is dragged over it
+            ['dragenter', 'dragover'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, highlight, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, unhighlight, false);
+            });
+
+            // Handle dropped files
+            uploadArea.addEventListener('drop', handleDrop, false);
+            
+            // Handle click to select files
+            uploadArea.addEventListener('click', () => fileInput.click());
+            
+            // Handle file input change
+            fileInput.addEventListener('change', handleFileSelect);
+        }
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        function highlight(e) {
+            uploadArea.classList.add('dragover');
+        }
+
+        function unhighlight(e) {
+            uploadArea.classList.remove('dragover');
+        }
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles(files);
+        }
+
+        function handleFileSelect(e) {
+            const files = e.target.files;
+            handleFiles(files);
+        }
+
+        function handleFiles(files) {
+            if (files.length > 0) {
+                selectedFile = files[0];
+                displaySelectedFile(selectedFile);
+                
+                // Auto-fill title if empty
+                const titleInput = document.getElementById('title');
+                if (!titleInput.value) {
+                    titleInput.value = selectedFile.name.replace(/\.[^/.]+$/, ""); // Remove extension
+                }
+            }
+        }
+
+        function displaySelectedFile(file) {
+            fileList.style.display = 'block';
+            
+            // Get file extension for icon
+            const extension = file.name.split('.').pop().toLowerCase();
+            const fileSize = formatFileSize(file.size);
+            
+            selectedFiles.innerHTML = `
+                <div class="file-item" id="selectedFile">
+                    <div class="file-info">
+                        <div class="file-icon ${extension}">
+                            <i class="${getFileIcon(extension)}"></i>
+                        </div>
+                        <div class="file-details">
+                            <div class="file-name">${file.name}</div>
+                            <div class="file-size">${fileSize}</div>
+                        </div>
+                    </div>
+                    <div class="file-actions">
+                        <button type="button" class="file-action remove" onclick="removeSelectedFile()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="progress-bar" id="progressBar" style="display: none;">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function removeSelectedFile() {
+            selectedFile = null;
+            fileList.style.display = 'none';
+            fileInput.value = '';
+            selectedFiles.innerHTML = '';
+        }
+
+        function getFileIcon(extension) {
+            const icons = {
+                'pdf': 'fa-file-pdf',
+                'doc': 'fa-file-word',
+                'docx': 'fa-file-word',
+                'xls': 'fa-file-excel',
+                'xlsx': 'fa-file-excel',
+                'pptx': 'fa-file-powerpoint',
+                'txt': 'fa-file-text',
+                'png': 'fa-file-image',
+                'jpg': 'fa-file-image',
+                'jpeg': 'fa-file-image',
+                'gif': 'fa-file-image',
+                'zip': 'fa-file-archive',
+                'rar': 'fa-file-archive'
+            };
+            return icons[extension] || 'fa-file';
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        }
+
+        function clearForm() {
+            if (confirm('Formu temizlemek istediğinizden emin misiniz?')) {
+                uploadForm.reset();
+                removeSelectedFile();
+                createToast('Form temizlendi', 'info');
+            }
+        }
+
+        // Form submission
+        uploadForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (!selectedFile) {
+                createToast('Lütfen bir dosya seçin', 'warning');
+                return;
+            }
+
+            if (isUploading) {
+                return;
+            }
+
+            isUploading = true;
+            setUploadingState(true);
+
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            
+            // Add form fields
+            const formFields = ['title', 'author', 'category_id', 'department', 'access_level', 'tags', 'description'];
+            formFields.forEach(field => {
+                const value = document.getElementById(field).value;
+                if (value) formData.append(field, value);
+            });
+
+            try {
+                // Show progress
+                showProgress();
+                
+                const response = await fetch('{{ url_for("admin_upload") }}', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    createToast('Dosya başarıyla yüklendi!', 'success');
+                    
+                    // Animate success
+                    document.getElementById('selectedFile').style.borderLeftColor = 'var(--success-color)';
+                    document.getElementById('progressFill').style.background = 'var(--success-color)';
+                    
+                    setTimeout(() => {
+                        window.location.href = '{{ url_for("files") }}';
+                    }, 1500);
+                } else {
+                    const errorData = await response.text();
+                    throw new Error(errorData || 'Yükleme hatası');
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+                createToast('Dosya yüklenirken hata oluştu: ' + error.message, 'error');
+                
+                // Animate error
+                document.getElementById('selectedFile').style.borderLeftColor = 'var(--danger-color)';
+                document.getElementById('progressFill').style.background = 'var(--danger-color)';
+                
+                hideProgress();
+            } finally {
+                isUploading = false;
+                setUploadingState(false);
+            }
+        });
+
+        function setUploadingState(uploading) {
+            uploadBtn.disabled = uploading;
+            
+            if (uploading) {
+                loadingSpinner.style.display = 'inline-block';
+                uploadText.textContent = 'Yükleniyor...';
+                uploadBtn.classList.add('pulse');
+            } else {
+                loadingSpinner.style.display = 'none';
+                uploadText.textContent = 'Dosyayı Yükle';
+                uploadBtn.classList.remove('pulse');
+            }
+        }
+
+        function showProgress() {
+            const progressBar = document.getElementById('progressBar');
+            const progressFill = document.getElementById('progressFill');
+            
+            progressBar.style.display = 'block';
+            
+            // Animate progress
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress > 90) progress = 90;
+                
+                progressFill.style.width = progress + '%';
+                
+                if (progress >= 90) {
+                    clearInterval(interval);
+                }
+            }, 200);
+        }
+
+        function hideProgress() {
+            setTimeout(() => {
+                const progressBar = document.getElementById('progressBar');
+                if (progressBar) {
+                    progressBar.style.display = 'none';
+                }
+            }, 1000);
+        }
+
+        // Toast notifications
+        function createToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            const colors = {
+                success: 'var(--success-color)',
+                error: 'var(--danger-color)',
+                warning: 'var(--warning-color)',
+                info: 'var(--info-color)'
+            };
+            
+            const icons = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                warning: 'fa-exclamation-triangle',
+                info: 'fa-info-circle'
+            };
+            
+            toast.innerHTML = `
+                <div style="
+                    position: fixed;
+                    top: 2rem;
+                    right: 2rem;
+                    background: ${colors[type]};
+                    color: white;
+                    padding: 1rem 1.5rem;
+                    border-radius: 0.5rem;
+                    box-shadow: var(--shadow-xl);
+                    z-index: 2000;
+                    animation: slideInRight 0.3s ease-out;
+                    max-width: 350px;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                ">
+                    <i class="fas ${icons[type]}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideInRight 0.3s ease-out reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+
+        // Form validation
+        function validateForm() {
+            const requiredFields = ['access_level'];
+            let isValid = true;
+            
+            requiredFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (!field.value) {
+                    field.style.borderColor = 'var(--danger-color)';
+                    isValid = false;
+                } else {
+                    field.style.borderColor = 'var(--gray-200)';
+                }
+            });
+            
+            return isValid;
+        }
+
+        // Real-time form validation
+        document.getElementById('access_level').addEventListener('change', function() {
+            if (this.value) {
+                this.style.borderColor = 'var(--success-color)';
+            }
+        });
+
+        // File size validation
+        function validateFileSize(file) {
+            const maxSize = 16 * 1024 * 1024; // 16MB
+            if (file.size > maxSize) {
+                createToast('Dosya boyutu 16MB\'dan büyük olamaz!', 'error');
+                return false;
+            }
+            return true;
+        }
+
+        // File type validation
+        function validateFileType(file) {
+            const allowedTypes = [
+                'application/pdf',
+                'application/msword',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'application/vnd.ms-excel',
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'application/vnd.ms-powerpoint',
+                'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                'text/plain',
+                'image/png',
+                'image/jpeg',
+                'image/gif',
+                'application/zip',
+                'application/x-rar-compressed'
+            ];
+            
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+            const allowedExtensions = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'png', 'jpg', 'jpeg', 'gif', 'zip', 'rar'];
+            
+            if (!allowedExtensions.includes(fileExtension)) {
+                createToast('Bu dosya türü desteklenmiyor!', 'error');
+                return false;
+            }
+            
+            return true;
+        }
+
+        // Enhanced file handling with validation
+        function handleFiles(files) {
+            if (files.length > 0) {
+                const file = files[0];
+                
+                // Validate file
+                if (!validateFileType(file) || !validateFileSize(file)) {
+                    return;
+                }
+                
+                selectedFile = file;
+                displaySelectedFile(selectedFile);
+                
+                // Auto-fill title if empty
+                const titleInput = document.getElementById('title');
+                if (!titleInput.value) {
+                    titleInput.value = file.name.replace(/\.[^/.]+$/, ""); // Remove extension
+                }
+                
+                createToast('Dosya başarıyla seçildi', 'success');
+            }
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl + Enter to submit
+            if (e.ctrlKey && e.key === 'Enter') {
+                e.preventDefault();
+                if (!isUploading && selectedFile) {
+                    uploadForm.dispatchEvent(new Event('submit'));
+                }
+            }
+            
+            // Escape to clear form
+            if (e.key === 'Escape') {
+                if (selectedFile) {
+                    removeSelectedFile();
+                }
+            }
+        });
+
+        // Auto-save form data to localStorage
+        function saveFormData() {
+            const formData = {
+                title: document.getElementById('title').value,
+                author: document.getElementById('author').value,
+                category_id: document.getElementById('category_id').value,
+                department: document.getElementById('department').value,
+                access_level: document.getElementById('access_level').value,
+                tags: document.getElementById('tags').value,
+                description: document.getElementById('description').value
+            };
+            
+            localStorage.setItem('uploadFormData', JSON.stringify(formData));
+        }
+
+        function loadFormData() {
+            const savedData = localStorage.getItem('uploadFormData');
+            if (savedData) {
+                const formData = JSON.parse(savedData);
+                Object.keys(formData).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element && formData[key]) {
+                        element.value = formData[key];
+                    }
+                });
+            }
+        }
+
+        // Save form data on input
+        document.querySelectorAll('input, select, textarea').forEach(element => {
+            element.addEventListener('input', saveFormData);
+            element.addEventListener('change', saveFormData);
+        });
+
+        // Clear saved data on successful upload
+        function clearSavedData() {
+            localStorage.removeItem('uploadFormData');
+        }
+
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDragDrop();
+            loadFormData();
+            
+            // Add pulse animation class
+            const pulseStyle = document.createElement('style');
+            pulseStyle.textContent = `
+                .pulse {
+                    animation: pulse 1.5s infinite;
+                }
+                @keyframes pulse {
+                    0% { transform: scale(1); }
+                    50% { transform: scale(1.05); }
+                    100% { transform: scale(1); }
+                }
+                @keyframes slideInRight {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+            `;
+            document.head.appendChild(pulseStyle);
+            
+            console.log('📤 TechCorp Upload System Ready');
+            console.log('⌨️  Shortcuts: Ctrl+Enter (Upload), ESC (Clear)');
+            console.log('📁 Max file size: 16MB');
+            console.log('🎯 Supported formats: PDF, DOC, XLS, PPT, TXT, Images, Archives');
+        });
+
+        // Performance monitoring
+        window.addEventListener('load', function() {
+            const loadTime = performance.now();
+            console.log(`⚡ Upload page loaded in: ${Math.round(loadTime)}ms`);
+        });
+    </script>
+</body>
+</html>
